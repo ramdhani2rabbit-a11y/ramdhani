@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
+import { MotionConfig, motion } from 'motion/react';
 import {
   ArrowUpRight,
   Menu,
@@ -281,196 +282,213 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Top Bar Contract: 3 zones separated by gap-8 */}
-      <header className="no-print sticky top-0 z-40 bg-slate-50/90 backdrop-blur-md border-b border-slate-200/80">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
-          {/* Zone 1: Single text element wordmark */}
-          <a
-            href="#beranda"
-            className="text-lg font-bold tracking-tight text-slate-950 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-          >
-            {STUDENT_PROFILE.shortBrand}
-          </a>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-slate-50 text-slate-900">
+        {/* Top Bar Contract: 3 zones separated by gap-8 */}
+        <header className="no-print sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+            {/* Zone 1: Single text element wordmark */}
+            <a
+              href="#beranda"
+              className="text-lg font-bold tracking-tight text-slate-950 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+            >
+              {STUDENT_PROFILE.shortBrand}
+            </a>
 
-          {/* Zone 2: 4 concise single-line nav links */}
-          <nav
-            aria-label="Navigasi utama"
-            className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600"
-          >
-            <a
-              href="#proyek"
-              className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+            {/* Zone 2: 4 concise single-line nav links */}
+            <nav
+              aria-label="Navigasi utama"
+              className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600"
             >
-              Proyek
-            </a>
-            <a
-              href="#kompetensi"
-              className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-            >
-              Kompetensi
-            </a>
-            <a
-              href="#pengalaman"
-              className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-            >
-              Pengalaman
-            </a>
-            <a
-              href="#sertifikasi"
-              className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-            >
-              Sertifikasi
-            </a>
-          </nav>
+              <a
+                href="#proyek"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              >
+                Proyek
+              </a>
+              <a
+                href="#kompetensi"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              >
+                Kompetensi
+              </a>
+              <a
+                href="#pengalaman"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              >
+                Pengalaman
+              </a>
+              <a
+                href="#sertifikasi"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              >
+                Sertifikasi
+              </a>
+            </nav>
 
-          {/* Zone 3: 1 primary action (+ mobile menu trigger on small viewports) */}
-          <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="#kontak"
-              className="hidden md:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Hubungi Saya
-            </a>
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-              aria-expanded={isMobileMenuOpen}
-              aria-label={isMobileMenuOpen ? 'Tutup menu' : 'Buka menu navigasi'}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg border border-slate-200 bg-white text-slate-800 hover:bg-slate-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Panel */}
-        {isMobileMenuOpen && (
-          <nav
-            aria-label="Navigasi seluler"
-            className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-1"
-          >
-            <a
-              href="#proyek"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
-            >
-              Proyek
-            </a>
-            <a
-              href="#kompetensi"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
-            >
-              Kompetensi
-            </a>
-            <a
-              href="#pengalaman"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
-            >
-              Pengalaman
-            </a>
-            <a
-              href="#sertifikasi"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
-            >
-              Sertifikasi
-            </a>
-            <div className="pt-2">
+            {/* Zone 3: 1 primary action (+ mobile menu trigger on small viewports) */}
+            <div className="flex items-center gap-3 shrink-0">
               <a
                 href="#kontak"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                className="hidden md:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 Hubungi Saya
               </a>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                aria-expanded={isMobileMenuOpen}
+                aria-label={isMobileMenuOpen ? 'Tutup menu' : 'Buka menu navigasi'}
+                className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg border border-slate-200 bg-white text-slate-800 hover:bg-slate-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
-          </nav>
-        )}
-      </header>
+          </div>
 
-      <main>
-        {/* Split-Screen Hero Section */}
-        <section
-          id="beranda"
-          className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 sm:pt-14 sm:pb-16"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-            {/* Left Column: Editorial Typographic Hierarchy */}
-            <div className="lg:col-span-6 flex flex-col justify-between py-2">
-              <div className="space-y-5">
-                <p className="text-sm font-medium text-slate-600">
-                  {STUDENT_PROFILE.program}
-                  <span className="mx-2 text-slate-300" aria-hidden="true">·</span>
-                  <span>{STUDENT_PROFILE.school}</span>
-                </p>
-
-                <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight text-slate-950 leading-[1.08] text-balance">
-                  {STUDENT_PROFILE.headline}
-                </h1>
-
-                <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
-                  {STUDENT_PROFILE.lead}
-                </p>
+          {/* Mobile Navigation Panel */}
+          {isMobileMenuOpen && (
+            <nav
+              aria-label="Navigasi seluler"
+              className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-1"
+            >
+              <a
+                href="#proyek"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
+              >
+                Proyek
+              </a>
+              <a
+                href="#kompetensi"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
+              >
+                Kompetensi
+              </a>
+              <a
+                href="#pengalaman"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
+              >
+                Pengalaman
+              </a>
+              <a
+                href="#sertifikasi"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-3 py-2.5 text-sm font-medium text-slate-800 rounded-lg hover:bg-slate-100"
+              >
+                Sertifikasi
+              </a>
+              <div className="pt-2">
+                <a
+                  href="#kontak"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                >
+                  Hubungi Saya
+                </a>
               </div>
+            </nav>
+          )}
+        </header>
 
-              <div className="pt-8 space-y-5">
-                <div className="flex flex-wrap items-center gap-4">
-                  <a
-                    href="#proyek"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    <span>Jelajahi Proyek Teknik</span>
-                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-                  </a>
+        <main>
+          {/* Architectural Split-Screen Hero Section */}
+          <section
+            id="beranda"
+            className="relative overflow-hidden"
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-engineering-grid"
+            />
 
-                  <button
-                    type="button"
-                    onClick={() => setIsResumeOpen(true)}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium text-slate-800 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-100/70 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    <FileText className="w-4 h-4 text-slate-600" aria-hidden="true" />
-                    <span>Ringkasan CV Teknis</span>
-                  </button>
+            <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 sm:pt-16 sm:pb-16">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                {/* Left Column: Editorial Typographic Hierarchy */}
+                <div className="lg:col-span-6 flex flex-col justify-between py-2">
+                  <div className="space-y-6">
+                    <p className="text-sm font-medium text-slate-600">
+                      <span className="text-blue-700 font-semibold">{STUDENT_PROFILE.program}</span>
+                      <span className="mx-2 text-slate-300" aria-hidden="true">·</span>
+                      <span>{STUDENT_PROFILE.school}</span>
+                    </p>
+
+                    <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-[-0.03em] text-slate-950 leading-[1.04] text-balance">
+                      Merancang Sistem Kelistrikan yang{' '}
+                      <span className="text-blue-600">Aman, Presisi,</span> dan Terukur.
+                    </h1>
+
+                    <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
+                      {STUDENT_PROFILE.lead}
+                    </p>
+                  </div>
+
+                  <div className="pt-10 space-y-5">
+                    <div className="flex flex-wrap items-center gap-3.5">
+                      <a
+                        href="#proyek"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-slate-950 hover:bg-blue-600 rounded-xl transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                      >
+                        <span>Jelajahi Proyek Teknik</span>
+                        <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                      </a>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsResumeOpen(true)}
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium text-slate-800 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-100/80 rounded-xl transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                      >
+                        <FileText className="w-4 h-4 text-slate-600" aria-hidden="true" />
+                        <span>Ringkasan CV Teknis</span>
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-slate-500">
+                      {STUDENT_PROFILE.availability}
+                      <span className="mx-2 text-slate-300" aria-hidden="true">·</span>
+                      <span>{STUDENT_PROFILE.location}</span>
+                    </p>
+                  </div>
                 </div>
 
-                <p className="text-xs text-slate-500">
-                  {STUDENT_PROFILE.availability}
-                  <span className="mx-2 text-slate-300" aria-hidden="true">·</span>
-                  <span>{STUDENT_PROFILE.location}</span>
-                </p>
+                {/* Right Column: Matching-Height Lab Portrait with Measured Scrim */}
+                <div className="lg:col-span-6">
+                  <div className="relative h-full min-h-[340px] sm:min-h-[440px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
+                    <ResilientImage
+                      src={STUDENT_PROFILE.heroImage}
+                      alt={STUDENT_PROFILE.heroImageAlt}
+                      fallbackTitle={`${STUDENT_PROFILE.fullName} — Laboratorium Ketenagalistrikan`}
+                      className="w-full h-full object-cover object-center"
+                      containerClassName="w-full h-full min-h-[340px]"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent"
+                    />
+                    <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between gap-4 text-xs text-white/90">
+                      <span className="font-medium">{STUDENT_PROFILE.fullName}</span>
+                      <span className="font-mono text-slate-200">Uji Panel 3-Fasa · 380V</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Obsidian 4-Column Proof & Metrics Band Directly Below Hero Split */}
+              <div className="mt-10 rounded-2xl bg-slate-950 text-white border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-800/90 overflow-hidden">
+                {HERO_METRICS.map((metric) => (
+                  <div key={metric.label} className="p-6 sm:p-7 space-y-1.5">
+                    <p className="text-3xl sm:text-[2rem] font-bold font-mono tabular-nums tracking-tight text-white">
+                      {metric.value}
+                    </p>
+                    <p className="text-sm font-medium text-slate-200">{metric.label}</p>
+                    <p className="text-xs text-slate-400">{metric.detail}</p>
+                  </div>
+                ))}
               </div>
             </div>
-
-            {/* Right Column: Matching-Height Lab Portrait */}
-            <div className="lg:col-span-6">
-              <div className="h-full min-h-[320px] sm:min-h-[420px] rounded-2xl overflow-hidden border border-slate-200 bg-white">
-                <ResilientImage
-                  src={STUDENT_PROFILE.heroImage}
-                  alt={STUDENT_PROFILE.heroImageAlt}
-                  fallbackTitle={`${STUDENT_PROFILE.fullName} — Laboratorium Ketenagalistrikan`}
-                  className="w-full h-full object-cover object-center"
-                  containerClassName="w-full h-full min-h-[320px]"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* 4-Column Proof & Metrics Strip Directly Below Hero Split */}
-          <div className="mt-10 pt-8 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {HERO_METRICS.map((metric) => (
-              <div key={metric.label} className="space-y-1">
-                <p className="text-2xl sm:text-3xl font-bold font-mono tabular-nums tracking-tight text-slate-950">
-                  {metric.value}
-                </p>
-                <p className="text-sm font-medium text-slate-900">{metric.label}</p>
-                <p className="text-xs text-slate-500">{metric.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+          </section>
 
         {/* Subtle Marquee Discipline Ribbon */}
         <div
@@ -544,9 +562,13 @@ export default function App() {
                 selectedCategory === 'Semua' && project.featured;
 
               return (
-                <article
+                <motion.article
                   key={project.id}
-                  className={`group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden transition-colors hover:border-slate-300 ${
+                  layout
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className={`group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5 ${
                     isWideFeatured ? 'md:col-span-2 lg:col-span-2' : ''
                   }`}
                 >
@@ -556,7 +578,7 @@ export default function App() {
                     className="flex flex-col h-full text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
                     <div
-                      className={`w-full overflow-hidden bg-slate-100 border-b border-slate-200 ${
+                      className={`relative w-full overflow-hidden bg-slate-100 border-b border-slate-200 ${
                         isWideFeatured ? 'aspect-[16/9]' : 'aspect-[4/3]'
                       }`}
                     >
@@ -564,16 +586,16 @@ export default function App() {
                         src={project.image}
                         alt={project.imageAlt}
                         fallbackTitle={project.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         containerClassName="w-full h-full"
                       />
                     </div>
 
                     <div className="p-6 flex flex-col flex-1 justify-between gap-5">
-                      <div className="space-y-2.5">
+                      <div className="space-y-3">
                         {/* Zero-pill inline metadata */}
                         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                          <span className="font-medium text-slate-700">{project.category}</span>
+                          <span className="font-semibold text-blue-700">{project.category}</span>
                           <span aria-hidden="true">·</span>
                           <span className="tabular-nums">{project.year}</span>
                           <span aria-hidden="true">·</span>
@@ -587,63 +609,81 @@ export default function App() {
                         <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
                           {project.summary}
                         </p>
+
+                        {/* Compact 2-Metric Engineering Preview */}
+                        {project.specs.length >= 2 && (
+                          <div className="grid grid-cols-2 gap-3 pt-2">
+                            {project.specs.slice(0, 2).map((spec) => (
+                              <div
+                                key={spec.label}
+                                className="px-3 py-2 rounded-lg bg-slate-50 border border-slate-200/80"
+                              >
+                                <p className="text-[11px] text-slate-500 truncate">{spec.label}</p>
+                                <p className="text-xs font-mono font-semibold text-slate-900 tabular-nums truncate">
+                                  {spec.value}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4 text-xs">
                         <span className="text-slate-500 truncate">
                           Acuan: <strong className="font-medium text-slate-800">{project.standardRef}</strong>
                         </span>
-                        <span className="inline-flex items-center gap-1 font-medium text-blue-700 whitespace-nowrap shrink-0">
-                          <span>Lihat Spesifikasi</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 text-slate-700 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-colors shrink-0">
+                          <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                         </span>
                       </div>
                     </div>
                   </button>
-                </article>
+                </motion.article>
               );
             })}
           </div>
         </section>
 
-        {/* Technical Competencies & Electrical Verification Calculator */}
+        {/* Technical Competencies (Asymmetric 4+8 Editorial Layout) & Electrical Verification Calculator */}
         <section
           id="kompetensi"
-          className="border-t border-slate-200 bg-white py-16 sm:py-20"
+          className="border-t border-slate-200 bg-white py-16 sm:py-24"
         >
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="space-y-2 max-w-2xl">
-              <p className="text-xs font-medium text-blue-700">
-                Bidang Keahlian & Perangkat Kerja
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 text-balance">
-                Kompetensi Inti Teknik Ketenagalistrikan
-              </h2>
-              <p className="text-sm sm:text-base text-slate-600">
-                Penguasaan teori perhitungan daya hingga eksekusi pengawatan panel dan pengujian keselamatan di lapangan.
-              </p>
-            </div>
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+              <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-3">
+                <p className="text-xs font-semibold text-blue-700">
+                  Bidang Keahlian & Perangkat Kerja
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 text-balance">
+                  Kompetensi Inti Teknik Ketenagalistrikan
+                </h2>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  Penguasaan teori perhitungan daya hingga eksekusi pengawatan panel dan pengujian keselamatan di lapangan.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
-              {COMPETENCIES.map((item) => (
-                <div
-                  key={item.number}
-                  className="pt-6 border-t border-slate-200 space-y-2.5"
-                >
-                  <h3 className="text-lg font-semibold text-slate-950">
-                    <span className="font-mono text-blue-700 mr-2 tabular-nums">
+              <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+                {COMPETENCIES.map((item) => (
+                  <div
+                    key={item.number}
+                    className="pt-6 border-t border-slate-200 space-y-3"
+                  >
+                    <span className="block text-2xl font-bold font-mono text-blue-600 tabular-nums">
                       {item.number}
                     </span>
-                    {item.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                    {item.description}
-                  </p>
-                  <p className="text-xs font-mono text-slate-500 pt-1">
-                    Perangkat: {item.tools}
-                  </p>
-                </div>
-              ))}
+                    <h3 className="text-lg font-semibold text-slate-950 tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      {item.description}
+                    </p>
+                    <p className="text-xs font-mono text-slate-500 pt-1">
+                      {item.tools}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Practical Engineering Verification Tool */}
@@ -654,14 +694,14 @@ export default function App() {
         {/* Field Apprenticeship (PKL) & Supervisor Testimonial */}
         <section
           id="pengalaman"
-          className="border-t border-slate-200 bg-slate-50 py-16 sm:py-20"
+          className="border-t border-slate-200 bg-slate-50 py-16 sm:py-24"
         >
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
               {/* Left 7 Columns: Experience Timeline */}
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-2">
-                  <p className="text-xs font-medium text-blue-700">
+                  <p className="text-xs font-semibold text-blue-700">
                     Rekam Jejak Lapangan & Laboratorium
                   </p>
                   <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 text-balance">
@@ -700,21 +740,21 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Right 5 Columns: Attributable Supervisor Testimonial (No border-l-4!) */}
+              {/* Right 5 Columns: Attributable Supervisor Testimonial (High-Contrast Obsidian Card) */}
               <div className="lg:col-span-5">
-                <figure className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 space-y-6">
-                  <p className="text-xs font-medium text-slate-500">
+                <figure className="p-7 sm:p-8 rounded-2xl bg-slate-950 text-slate-100 border border-slate-800 space-y-6">
+                  <p className="text-xs font-medium text-blue-400">
                     Evaluasi Pembimbing Lapangan
                   </p>
-                  <blockquote className="text-base text-slate-800 leading-relaxed">
+                  <blockquote className="text-base sm:text-lg text-white leading-relaxed">
                     “{TESTIMONIAL.quote}”
                   </blockquote>
-                  <figcaption className="pt-4 border-t border-slate-200 space-y-0.5">
-                    <p className="text-sm font-semibold text-slate-950">
+                  <figcaption className="pt-5 border-t border-slate-800 space-y-0.5">
+                    <p className="text-sm font-semibold text-white">
                       {TESTIMONIAL.author}
                     </p>
-                    <p className="text-xs text-slate-600">{TESTIMONIAL.role}</p>
-                    <p className="text-xs text-slate-500">{TESTIMONIAL.organization}</p>
+                    <p className="text-xs text-slate-300">{TESTIMONIAL.role}</p>
+                    <p className="text-xs text-slate-400">{TESTIMONIAL.organization}</p>
                   </figcaption>
                 </figure>
               </div>
@@ -1109,6 +1149,7 @@ export default function App() {
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}
       />
-    </div>
+      </div>
+    </MotionConfig>
   );
 }

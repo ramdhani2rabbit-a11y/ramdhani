@@ -269,28 +269,28 @@ export function ThreePhaseCalculator() {
         </div>
 
         <div className="lg:col-span-7 space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 p-6 rounded-xl bg-slate-950 text-white border border-slate-800">
             <div>
-              <p className="text-xs text-slate-500 mb-1">Arus Nominal (In)</p>
-              <p className="text-xl font-semibold font-mono tabular-nums text-slate-950">
+              <p className="text-xs text-slate-400 mb-1.5">Arus Nominal (In)</p>
+              <p className="text-2xl font-semibold font-mono tabular-nums text-white">
                 {calculation.nominalCurrent.toFixed(1)} A
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-500 mb-1">Daya Semu (S)</p>
-              <p className="text-xl font-semibold font-mono tabular-nums text-slate-950">
+              <p className="text-xs text-slate-400 mb-1.5">Daya Semu (S)</p>
+              <p className="text-2xl font-semibold font-mono tabular-nums text-white">
                 {calculation.apparentPowerKva.toFixed(1)} kVA
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-500 mb-1">Rekomendasi MCB</p>
-              <p className="text-xl font-semibold font-mono tabular-nums text-blue-700">
+              <p className="text-xs text-slate-400 mb-1.5">Rekomendasi MCB</p>
+              <p className="text-2xl font-semibold font-mono tabular-nums text-blue-400">
                 {calculation.recommendedMcb} A
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-500 mb-1">Kabel Minimum</p>
-              <p className="text-sm font-semibold font-mono tabular-nums text-slate-950 pt-1">
+              <p className="text-xs text-slate-400 mb-1.5">Kabel Minimum</p>
+              <p className="text-sm font-semibold font-mono tabular-nums text-slate-100 pt-1">
                 {calculation.cableRecommendation}
               </p>
             </div>
