@@ -34,6 +34,16 @@
           "maxLength": 80,
           "description": "Ringkasan parameter tegangan/sistem."
         },
+        "featured": {
+          "type": "boolean",
+          "description": "Menandai proyek unggulan pada grid Bento."
+        },
+        "imageUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "URL gambar proyek atau kosong untuk fallback bawaan."
+        },
         "summary": {
           "type": "string",
           "minLength": 10,
@@ -68,6 +78,14 @@
           "type": "array",
           "description": "Daftar komponen utama (maksimal 12 item)."
         },
+        "specs": {
+          "type": "array",
+          "description": "Daftar spesifikasi teknis {label, value} (maksimal 10 item)."
+        },
+        "sortOrder": {
+          "type": "number",
+          "description": "Urutan tampilan proyek."
+        },
         "isPublished": {
           "type": "boolean",
           "description": "Status publikasi proyek pada halaman portofolio."
@@ -94,12 +112,259 @@
         "category",
         "year",
         "systemSpec",
+        "featured",
+        "imageUrl",
         "summary",
         "challenge",
         "solution",
         "standardRef",
         "role",
         "components",
+        "specs",
+        "sortOrder",
+        "isPublished",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Competency": {
+      "title": "Competency",
+      "description": "Kompetensi teknis ketenagalistrikan pada portofolio.",
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 12,
+          "description": "Nomor urut editorial (mis. 01.)."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140,
+          "description": "Judul kompetensi."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 600,
+          "description": "Penjelasan kompetensi."
+        },
+        "tools": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200,
+          "description": "Perangkat lunak atau alat ukur yang dikuasai."
+        },
+        "sortOrder": {
+          "type": "number",
+          "description": "Urutan tampilan kompetensi."
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Status publikasi."
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "number",
+        "title",
+        "description",
+        "tools",
+        "sortOrder",
+        "isPublished",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Experience": {
+      "title": "Experience",
+      "description": "Riwayat praktik kerja lapangan, magang, atau asistensi laboratorium.",
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 80,
+          "description": "Periode pelaksanaan."
+        },
+        "role": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140,
+          "description": "Jabatan atau peran."
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160,
+          "description": "Nama perusahaan atau institusi."
+        },
+        "location": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Lokasi kota/provinsi."
+        },
+        "highlights": {
+          "type": "array",
+          "description": "Daftar pencapaian/tugas utama (maksimal 8 poin)."
+        },
+        "sortOrder": {
+          "type": "number"
+        },
+        "isPublished": {
+          "type": "boolean"
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "period",
+        "role",
+        "organization",
+        "location",
+        "highlights",
+        "sortOrder",
+        "isPublished",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Certification": {
+      "title": "Certification",
+      "description": "Sertifikasi keahlian resmi dan prestasi lomba siswa.",
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "pattern": "^20[0-9]{2}$",
+          "minLength": 4,
+          "maxLength": 4
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 180
+        },
+        "issuer": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "credentialCode": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 240
+        },
+        "sortOrder": {
+          "type": "number"
+        },
+        "isPublished": {
+          "type": "boolean"
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "year",
+        "name",
+        "issuer",
+        "credentialCode",
+        "scope",
+        "sortOrder",
+        "isPublished",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PortfolioProfile": {
+      "title": "PortfolioProfile",
+      "description": "Data profil utama, ringkasan, dan testimoni pembimbing portofolio.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "shortBrand": { "type": "string", "minLength": 2, "maxLength": 50 },
+        "program": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "school": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "location": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "email": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 150,
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+        },
+        "phone": { "type": "string", "minLength": 5, "maxLength": 40 },
+        "headline": { "type": "string", "minLength": 5, "maxLength": 160 },
+        "lead": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "availability": { "type": "string", "minLength": 5, "maxLength": 180 },
+        "testimonialQuote": { "type": "string", "minLength": 10, "maxLength": 600 },
+        "testimonialAuthor": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "testimonialRole": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "testimonialOrg": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "isPublished": { "type": "boolean" },
+        "authorUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "fullName",
+        "shortBrand",
+        "program",
+        "school",
+        "location",
+        "email",
+        "phone",
+        "headline",
+        "lead",
+        "availability",
+        "testimonialQuote",
+        "testimonialAuthor",
+        "testimonialRole",
+        "testimonialOrg",
         "isPublished",
         "authorUid",
         "createdAt",
@@ -114,48 +379,40 @@
         "senderUid": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 128,
-          "description": "UID pengirim yang terautentikasi."
+          "maxLength": 128
         },
         "senderName": {
           "type": "string",
           "minLength": 2,
-          "maxLength": 100,
-          "description": "Nama pengirim atau instansi."
+          "maxLength": 100
         },
         "senderEmail": {
           "type": "string",
           "minLength": 5,
           "maxLength": 150,
-          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
-          "description": "Alamat email pengirim."
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
         },
         "subject": {
           "type": "string",
           "minLength": 2,
-          "maxLength": 160,
-          "description": "Topik diskusi atau undangan wawancara."
+          "maxLength": 160
         },
         "message": {
           "type": "string",
           "minLength": 5,
-          "maxLength": 2000,
-          "description": "Isi pesan lengkap."
+          "maxLength": 2000
         },
         "status": {
           "type": "string",
-          "enum": ["baru", "dibalas", "arsip"],
-          "description": "Status tindak lanjut pesan."
+          "enum": ["baru", "dibalas", "arsip"]
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Waktu pengiriman dari server."
+          "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Waktu pembaruan status dari server."
+          "format": "date-time"
         }
       },
       "required": [
@@ -177,46 +434,37 @@
         "ownerUid": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 128,
-          "description": "UID pemilik catatan perhitungan."
+          "maxLength": 128
         },
         "label": {
           "type": "string",
           "minLength": 2,
-          "maxLength": 100,
-          "description": "Nama beban atau panel."
+          "maxLength": 100
         },
         "phase": {
           "type": "string",
-          "enum": ["3-phase", "1-phase"],
-          "description": "Sistem fasa listrik."
+          "enum": ["3-phase", "1-phase"]
         },
         "powerKw": {
-          "type": "number",
-          "description": "Daya aktif beban dalam kW."
+          "type": "number"
         },
         "powerFactor": {
-          "type": "number",
-          "description": "Faktor daya cos phi."
+          "type": "number"
         },
         "nominalCurrent": {
-          "type": "number",
-          "description": "Arus nominal terhitung dalam Ampere."
+          "type": "number"
         },
         "recommendedMcb": {
-          "type": "number",
-          "description": "Rating MCB yang direkomendasikan dalam Ampere."
+          "type": "number"
         },
         "cableRecommendation": {
           "type": "string",
           "minLength": 3,
-          "maxLength": 60,
-          "description": "Rekomendasi ukuran kabel tembaga."
+          "maxLength": 60
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Waktu penyimpanan dari server."
+          "format": "date-time"
         }
       },
       "required": [
@@ -239,13 +487,11 @@
         "email": {
           "type": "string",
           "minLength": 5,
-          "maxLength": 150,
-          "description": "Email admin terverifikasi."
+          "maxLength": 150
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Waktu penambahan admin."
+          "format": "date-time"
         }
       },
       "required": ["email", "createdAt"]
@@ -255,6 +501,22 @@
     "/projects/{projectId}": {
       "schema": { "$ref": "#/entities/PortfolioProject" },
       "description": "Daftar proyek ketenagalistrikan portofolio siswa."
+    },
+    "/competencies/{competencyId}": {
+      "schema": { "$ref": "#/entities/Competency" },
+      "description": "Daftar kompetensi teknis portofolio."
+    },
+    "/experiences/{experienceId}": {
+      "schema": { "$ref": "#/entities/Experience" },
+      "description": "Daftar pengalaman praktik kerja lapangan dan laboratorium."
+    },
+    "/certifications/{certificationId}": {
+      "schema": { "$ref": "#/entities/Certification" },
+      "description": "Daftar sertifikasi keahlian dan prestasi."
+    },
+    "/portfolioProfile/{profileId}": {
+      "schema": { "$ref": "#/entities/PortfolioProfile" },
+      "description": "Konfigurasi profil utama dan testimoni pembimbing."
     },
     "/inquiries/{inquiryId}": {
       "schema": { "$ref": "#/entities/ContactInquiry" },

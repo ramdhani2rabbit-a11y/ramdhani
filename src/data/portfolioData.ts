@@ -24,6 +24,7 @@ export interface PortfolioProject {
   systemSpec: string;
   featured?: boolean;
   image: string;
+  imageUrl?: string;
   imageAlt: string;
   summary: string;
   challenge: string;
@@ -32,32 +33,71 @@ export interface PortfolioProject {
   role: string;
   components: string[];
   specs: TechnicalSpec[];
+  sortOrder?: number;
+  isPublished?: boolean;
 }
 
 export interface CompetencyItem {
+  id: string;
   number: string;
   title: string;
   description: string;
   tools: string;
+  sortOrder?: number;
+  isPublished?: boolean;
 }
 
 export interface ExperienceItem {
+  id: string;
   period: string;
   role: string;
   organization: string;
   location: string;
   highlights: string[];
+  sortOrder?: number;
+  isPublished?: boolean;
 }
 
 export interface CertificationItem {
+  id: string;
   year: string;
   name: string;
   issuer: string;
   credentialCode: string;
   scope: string;
+  sortOrder?: number;
+  isPublished?: boolean;
 }
 
-export const STUDENT_PROFILE = {
+export interface ProfileData {
+  fullName: string;
+  shortBrand: string;
+  program: string;
+  school: string;
+  location: string;
+  email: string;
+  phone: string;
+  heroImage: string;
+  heroImageAlt: string;
+  headline: string;
+  lead: string;
+  availability: string;
+  testimonialQuote: string;
+  testimonialAuthor: string;
+  testimonialRole: string;
+  testimonialOrg: string;
+}
+
+export const DEFAULT_PROJECT_IMAGE_MAP: Record<string, string> = {
+  'phb-3fasa-atelier': projectPanelPhbImg,
+  'otomasi-plc-star-delta': projectPlcMotorImg,
+  'plts-atap-on-grid': projectSolarPltsImg,
+  'audit-pembumian-isolasi': projectGroundingTestImg,
+};
+
+export const FALLBACK_NEW_PROJECT_IMAGE = projectPanelPhbImg;
+
+export const STUDENT_PROFILE: ProfileData = {
   fullName: 'Raka Pratama Putra',
   shortBrand: 'Raka Pratama',
   program: 'Teknik Instalasi Tenaga Listrik (TITL)',
@@ -73,6 +113,11 @@ export const STUDENT_PROFILE = {
     'Siswa dan calon teknisi muda ketenagalistrikan dengan spesialisasi perakitan Panel Hubung Bagi 3-fasa, proteksi petir & pembumian, otomasi PLC industri, serta komisioning berbasis PUIL 2011.',
   availability:
     'Siap Bergabung untuk Posisi Teknisi Listrik Industri, Panel Maker & Pemeliharaan Gardu',
+  testimonialQuote:
+    'Selama enam bulan praktik lapangan, Raka menunjukkan ketangguhan kerja di gardu distribusi, ketelitian dalam membaca diagram pengawatan, serta disiplin ketat terhadap prosedur K3 dan LOTO. Catatan pengukuran beban gardu dan pembumian arrester yang disusunnya langsung membantu tim kami menstabilkan tiga penyulang.',
+  testimonialAuthor: 'Ir. Hendra Wijaya, S.T.',
+  testimonialRole: 'Supervisor Pemeliharaan Jaringan Distribusi',
+  testimonialOrg: 'PT PLN (Persero) UP3 Bandung',
 };
 
 export const HERO_METRICS = [
@@ -107,6 +152,7 @@ export const PROJECTS: PortfolioProject[] = [
     systemSpec: '380V / 50Hz · 3-Fasa + N + PE',
     featured: true,
     image: projectPanelPhbImg,
+    imageUrl: '',
     imageAlt:
       'Interior panel distribusi utama 3-fasa dengan susunan busbar tembaga presisi, pemutus tenaga MCCB, MCB cabang, dan meter daya digital',
     summary:
@@ -132,6 +178,8 @@ export const PROJECTS: PortfolioProject[] = [
       { label: 'THD Tegangan', value: '1,2 %' },
       { label: 'Status Uji Beban', value: 'Lulus (2 Jam Beban Penuh)' },
     ],
+    sortOrder: 1,
+    isPublished: true,
   },
   {
     id: 'otomasi-plc-star-delta',
@@ -139,7 +187,9 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Otomasi PLC',
     year: '2025',
     systemSpec: 'PLC S7-1200 · 5,5 kW Motor',
+    featured: false,
     image: projectPlcMotorImg,
+    imageUrl: '',
     imageAlt:
       'Meja latih otomasi industri berisi PLC Siemens, kontaktor magnetik, relai beban lebih termal, dan motor induksi 3-fasa',
     summary:
@@ -164,6 +214,8 @@ export const PROJECTS: PortfolioProject[] = [
       { label: 'Tegangan Kontrol', value: '24 VDC Terisolasi' },
       { label: 'Respon Emergency Stop', value: '< 15 ms Cut-off' },
     ],
+    sortOrder: 2,
+    isPublished: true,
   },
   {
     id: 'plts-atap-on-grid',
@@ -171,7 +223,9 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Energi Terbarukan',
     year: '2025',
     systemSpec: '3,3 kWp · DC 48V / AC 230V',
+    featured: false,
     image: projectSolarPltsImg,
+    imageUrl: '',
     imageAlt:
       'Susunan panel surya monokristalin di atap gedung bersama inverter dan kotak penggabung DC terpasang rapi di dinding',
     summary:
@@ -196,6 +250,8 @@ export const PROJECTS: PortfolioProject[] = [
       { label: 'Efisiensi Konversi MPPT', value: '97,6 %' },
       { label: 'Rugi Tegangan Jalur DC', value: '1,18 %' },
     ],
+    sortOrder: 3,
+    isPublished: true,
   },
   {
     id: 'audit-pembumian-isolasi',
@@ -203,7 +259,9 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Proteksi & Uji',
     year: '2026',
     systemSpec: 'Megger 500V · Metode 3-Titik',
+    featured: false,
     image: projectGroundingTestImg,
+    imageUrl: '',
     imageAlt:
       'Alat ukur digital tahanan pembumian Megger terhubung ke busbar grounding tembaga di ruang panel listrik',
     summary:
@@ -228,42 +286,57 @@ export const PROJECTS: PortfolioProject[] = [
       { label: 'Tahanan Isolasi L-PE', value: '842 MΩ @ 500 VDC' },
       { label: 'Waktu Trip RCCB 30 mA', value: '24 ms' },
     ],
+    sortOrder: 4,
+    isPublished: true,
   },
 ];
 
 export const COMPETENCIES: CompetencyItem[] = [
   {
+    id: 'comp-1',
     number: '01.',
     title: 'Instalasi Tenaga & Panel Distribusi (PHB)',
     description:
       'Membaca dan menggambar Single Line Diagram serta Wiring Diagram, menghitung kebutuhan KHA kabel, pembagian beban 3-fasa seimbang, hingga perakitan busbar dan pemutus tenaga MCCB/MCB sesuai PUIL 2011.',
     tools: 'AutoCAD Electrical · EPLAN · Crimping Hidrolik · Tang Ampere True-RMS',
+    sortOrder: 1,
+    isPublished: true,
   },
   {
+    id: 'comp-2',
     number: '02.',
     title: 'Otomasi Industri & Kendali Motor Listrik',
     description:
       'Merancang rangkaian kontrol elektromagnetik (DOL, Forward-Reverse, Star-Delta, Berurutan) serta memprogram PLC menggunakan Ladder Diagram untuk kendali motor industri dan sensor lapangan.',
     tools: 'TIA Portal · CX-Programmer · EKTS Simulator · Kontaktor & TOR',
+    sortOrder: 2,
+    isPublished: true,
   },
   {
+    id: 'comp-3',
     number: '03.',
     title: 'Proteksi Petir, Pembumian & Keselamatan K3',
     description:
       'Melaksanakan inspeksi kelayakan operasi instalasi, pemasangan Surge Protection Device (SPD), pengujian tahanan tanah, dan isolasi penghantar dengan prosedur ketat Lockout-Tagout (LOTO).',
     tools: 'Digital Earth Tester · Megger 1000V · RCD Tester · Prosedur LOTO',
+    sortOrder: 3,
+    isPublished: true,
   },
   {
+    id: 'comp-4',
     number: '04.',
     title: 'Energi Terbarukan & Audit Efisiensi Daya',
     description:
       'Menghitung sizing array PLTS atap, proteksi sisi DC dan AC, komisioning inverter hibrida, serta analisis faktor daya dan perbaikan cos φ menggunakan kapasitor bank.',
     tools: 'PVsyst Dasar · Power Quality Analyzer · DC Clamp Meter · Kalkulasi Cos φ',
+    sortOrder: 4,
+    isPublished: true,
   },
 ];
 
 export const EXPERIENCES: ExperienceItem[] = [
   {
+    id: 'exp-1',
     period: 'Juli – Desember 2025',
     role: 'Teknisi Praktik Kerja Lapangan (Divisi Pemeliharaan Distribusi)',
     organization: 'PT PLN (Persero) UP3 Bandung — Unit Layanan Pelanggan',
@@ -273,8 +346,11 @@ export const EXPERIENCES: ExperienceItem[] = [
       'Melaksanakan pemeriksaan tahanan pembumian PHB-TR dan arrester gardu menggunakan Earth Clamp Tester dengan akurasi pelaporan harian.',
       'Menyusun rekapitulasi dokumentasi teknis pemeliharaan panel LV (Low Voltage) yang mempercepat pelacakan riwayat perbaikan sebesar 25% di tim unit.',
     ],
+    sortOrder: 1,
+    isPublished: true,
   },
   {
+    id: 'exp-2',
     period: 'Januari 2025 – Sekarang',
     role: 'Koordinator Asisten Laboratorium Instalasi Tenaga',
     organization: 'Bengkel Teknik Ketenagalistrikan SMKN 2 Bandung',
@@ -283,44 +359,50 @@ export const EXPERIENCES: ExperienceItem[] = [
       'Menyiapkan 16 unit trainer kontrol motor dan memeriksa kelayakan alat ukur sebelum sesi praktikum siswa kelas XI.',
       'Memandu pelaksanaan prosedur K3 listrik dan verifikasi rangkaian kontrol sebelum penyambungan ke sumber tegangan 3-fasa.',
     ],
+    sortOrder: 2,
+    isPublished: true,
   },
 ];
 
-export const TESTIMONIAL = {
-  quote:
-    'Selama enam bulan praktik lapangan, Raka menunjukkan ketangguhan kerja di gardu distribusi, ketelitian dalam membaca diagram pengawatan, serta disiplin ketat terhadap prosedur K3 dan LOTO. Catatan pengukuran beban gardu dan pembumian arrester yang disusunnya langsung membantu tim kami menstabilkan tiga penyulang.',
-  author: 'Ir. Hendra Wijaya, S.T.',
-  role: 'Supervisor Pemeliharaan Jaringan Distribusi',
-  organization: 'PT PLN (Persero) UP3 Bandung',
-};
-
 export const CERTIFICATIONS: CertificationItem[] = [
   {
+    id: 'cert-1',
     year: '2026',
     name: 'Sertifikat Kompetensi Klaster Pemasangan Instalasi Tenaga Listrik Bangunan Industri',
     issuer: 'BNSP — LSP P1 Teknik Ketenagalistrikan',
     credentialCode: 'REG. TITL-2026-0418',
     scope: 'Pengawatan PHB 3-Fasa, Kendali Motor & Pengujian Tahanan Isolasi',
+    sortOrder: 1,
+    isPublished: true,
   },
   {
+    id: 'cert-2',
     year: '2025',
     name: 'Juara 2 Lomba Kompetensi Siswa (LKS) Bidang Electrical Installation',
     issuer: 'Dinas Pendidikan Provinsi Jawa Barat',
     credentialCode: 'LKS-JABAR-EL-2025',
     scope: 'Instalasi Sistem Smart Building KNX & Panel Distribusi Presisi',
+    sortOrder: 2,
+    isPublished: true,
   },
   {
+    id: 'cert-3',
     year: '2025',
     name: 'Sertifikat Keselamatan dan Kesehatan Kerja (K3) Bidang Listrik Dasar',
     issuer: 'Balai K3 Bandung & Praktisi Industri',
     credentialCode: 'K3L-BDG-2025-119',
     scope: 'Identifikasi Bahaya Busur Listrik, APD Tegangan Rendah & LOTO',
+    sortOrder: 3,
+    isPublished: true,
   },
   {
+    id: 'cert-4',
     year: '2024',
     name: 'Pelatihan Dasar Pemrograman PLC Industri & Sistem SCADA',
     issuer: 'Balai Besar Pengembangan Penjaminan Mutu Pendidikan Vokasi (BBPPMPV)',
     credentialCode: 'BBP-PLC-2024-882',
     scope: 'Ladder Logic, Timer/Counter, Sequencing & Troubleshooting I/O',
+    sortOrder: 4,
+    isPublished: true,
   },
 ];

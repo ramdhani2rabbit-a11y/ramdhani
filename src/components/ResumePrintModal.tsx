@@ -7,14 +7,32 @@ import {
   EXPERIENCES,
   CERTIFICATIONS,
   PROJECTS,
+  type ProfileData,
+  type CompetencyItem,
+  type ExperienceItem,
+  type CertificationItem,
+  type PortfolioProject,
 } from '../data/portfolioData';
 
 interface ResumePrintModalProps {
   isOpen: boolean;
   onClose: () => void;
+  profile?: ProfileData;
+  competencies?: CompetencyItem[];
+  experiences?: ExperienceItem[];
+  certifications?: CertificationItem[];
+  projects?: PortfolioProject[];
 }
 
-export function ResumePrintModal({ isOpen, onClose }: ResumePrintModalProps) {
+export function ResumePrintModal({
+  isOpen,
+  onClose,
+  profile = STUDENT_PROFILE,
+  competencies = COMPETENCIES,
+  experiences = EXPERIENCES,
+  certifications = CERTIFICATIONS,
+  projects = PROJECTS,
+}: ResumePrintModalProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -36,18 +54,18 @@ export function ResumePrintModal({ isOpen, onClose }: ResumePrintModalProps) {
 
   const handleCopySummary = async () => {
     const plainText = [
-      `${STUDENT_PROFILE.fullName} — ${STUDENT_PROFILE.program}`,
-      `${STUDENT_PROFILE.school} | ${STUDENT_PROFILE.location}`,
-      `Email: ${STUDENT_PROFILE.email} | Telp: ${STUDENT_PROFILE.phone}`,
+      `${profile.fullName} — ${profile.program}`,
+      `${profile.school} | ${profile.location}`,
+      `Email: ${profile.email} | Telp: ${profile.phone}`,
       '',
       'KOMPETENSI INTI:',
-      ...COMPETENCIES.map((c) => `- ${c.title} (${c.tools})`),
+      ...competencies.map((c) => `- ${c.title} (${c.tools})`),
       '',
       'PROYEK PILIHAN:',
-      ...PROJECTS.map((p) => `- ${p.title} (${p.year}, ${p.systemSpec})`),
+      ...projects.map((p) => `- ${p.title} (${p.year}, ${p.systemSpec})`),
       '',
       'SERTIFIKASI & PRESTASI:',
-      ...CERTIFICATIONS.map((s) => `- [${s.year}] ${s.name} — ${s.issuer}`),
+      ...certifications.map((s) => `- [${s.year}] ${s.name} — ${s.issuer}`),
     ].join('\n');
 
     try {
@@ -126,13 +144,13 @@ export function ResumePrintModal({ isOpen, onClose }: ResumePrintModalProps) {
             <div className="overflow-y-auto p-6 sm:p-10 space-y-7 text-slate-900 bg-white">
               <div className="border-b border-slate-200 pb-5">
                 <h3 className="text-2xl font-bold tracking-tight text-slate-950">
-                  {STUDENT_PROFILE.fullName}
+                  {profile.fullName}
                 </h3>
                 <p className="text-sm font-medium text-blue-700 mt-1">
-                  {STUDENT_PROFILE.program} · {STUDENT_PROFILE.school}
+                  {profile.program} · {profile.school}
                 </p>
                 <p className="text-xs text-slate-600 mt-2 font-mono">
-                  {STUDENT_PROFILE.location} · {STUDENT_PROFILE.email} · {STUDENT_PROFILE.phone}
+                  {profile.location} · {profile.email} · {profile.phone}
                 </p>
               </div>
 
@@ -141,17 +159,17 @@ export function ResumePrintModal({ isOpen, onClose }: ResumePrintModalProps) {
                   Profil Singkat
                 </h4>
                 <p className="text-sm text-slate-700 leading-relaxed">
-                  {STUDENT_PROFILE.lead}
+                  {profile.lead}
                 </p>
               </div>
 
               <div>
                 <h4 className="text-sm font-semibold text-slate-950 mb-3">
-                  Pengalaman Praktik Lapangan & Laboratorium
+                  Pengalaman Praktik Lapangan &amp; Laboratorium
                 </h4>
                 <div className="space-y-4">
-                  {EXPERIENCES.map((exp) => (
-                    <div key={exp.role} className="space-y-1">
+                  {experiences.map((exp) => (
+                    <div key={exp.id || exp.role} className="space-y-1">
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <p className="text-sm font-semibold text-slate-900">{exp.role}</p>
                         <span className="text-xs font-mono text-slate-500 tabular-nums">
@@ -173,12 +191,12 @@ export function ResumePrintModal({ isOpen, onClose }: ResumePrintModalProps) {
 
               <div>
                 <h4 className="text-sm font-semibold text-slate-950 mb-2.5">
-                  Sertifikasi & Prestasi Keahlian
+                  Sertifikasi &amp; Prestasi Keahlian
                 </h4>
                 <div className="divide-y divide-slate-200 border-t border-b border-slate-200">
-                  {CERTIFICATIONS.map((cert) => (
+                  {certifications.map((cert) => (
                     <div
-                      key={cert.credentialCode}
+                      key={cert.id || cert.credentialCode}
                       className="py-2.5 flex flex-wrap items-baseline justify-between gap-2 text-xs"
                     >
                       <div>

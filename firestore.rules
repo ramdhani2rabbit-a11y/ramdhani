@@ -47,19 +47,23 @@ service cloud.firestore {
     // Validation Blueprint: PortfolioProject
     function isValidProject(data) {
       return data.keys().hasAll([
-          'title', 'category', 'year', 'systemSpec', 'summary',
-          'challenge', 'solution', 'standardRef', 'role',
-          'components', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+          'title', 'category', 'year', 'systemSpec', 'featured', 'imageUrl',
+          'summary', 'challenge', 'solution', 'standardRef', 'role',
+          'components', 'specs', 'sortOrder', 'isPublished', 'authorUid',
+          'createdAt', 'updatedAt'
         ])
         && data.keys().hasOnly([
-          'title', 'category', 'year', 'systemSpec', 'summary',
-          'challenge', 'solution', 'standardRef', 'role',
-          'components', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+          'title', 'category', 'year', 'systemSpec', 'featured', 'imageUrl',
+          'summary', 'challenge', 'solution', 'standardRef', 'role',
+          'components', 'specs', 'sortOrder', 'isPublished', 'authorUid',
+          'createdAt', 'updatedAt'
         ])
         && data.title is string && data.title.size() >= 5 && data.title.size() <= 160
         && data.category in ['Panel & Distribusi', 'Otomasi PLC', 'Energi Terbarukan', 'Proteksi & Uji']
         && data.year is string && data.year.size() == 4 && data.year.matches('^20[0-9]{2}$')
         && data.systemSpec is string && data.systemSpec.size() >= 3 && data.systemSpec.size() <= 80
+        && data.featured is bool
+        && data.imageUrl is string && data.imageUrl.size() <= 500
         && data.summary is string && data.summary.size() >= 10 && data.summary.size() <= 600
         && data.challenge is string && data.challenge.size() >= 10 && data.challenge.size() <= 800
         && data.solution is string && data.solution.size() >= 10 && data.solution.size() <= 800
@@ -67,6 +71,115 @@ service cloud.firestore {
         && data.role is string && data.role.size() >= 3 && data.role.size() <= 120
         && data.components is list && data.components.size() <= 12
         && (data.components.size() == 0 || (data.components[0] is string && data.components[0].size() <= 120))
+        && data.specs is list && data.specs.size() <= 10
+        && (data.specs.size() == 0 || (
+          data.specs[0] is map &&
+          data.specs[0].keys().hasAll(['label', 'value']) &&
+          data.specs[0].keys().hasOnly(['label', 'value']) &&
+          data.specs[0].label is string && data.specs[0].label.size() <= 80 &&
+          data.specs[0].value is string && data.specs[0].value.size() <= 80
+        ))
+        && data.sortOrder is number && data.sortOrder >= 0 && data.sortOrder <= 1000
+        && data.isPublished is bool
+        && data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: Competency
+    function isValidCompetency(data) {
+      return data.keys().hasAll([
+          'number', 'title', 'description', 'tools', 'sortOrder',
+          'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'number', 'title', 'description', 'tools', 'sortOrder',
+          'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.number is string && data.number.size() >= 1 && data.number.size() <= 12
+        && data.title is string && data.title.size() >= 3 && data.title.size() <= 140
+        && data.description is string && data.description.size() >= 10 && data.description.size() <= 600
+        && data.tools is string && data.tools.size() >= 2 && data.tools.size() <= 200
+        && data.sortOrder is number && data.sortOrder >= 0 && data.sortOrder <= 1000
+        && data.isPublished is bool
+        && data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: Experience
+    function isValidExperience(data) {
+      return data.keys().hasAll([
+          'period', 'role', 'organization', 'location', 'highlights',
+          'sortOrder', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'period', 'role', 'organization', 'location', 'highlights',
+          'sortOrder', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.period is string && data.period.size() >= 3 && data.period.size() <= 80
+        && data.role is string && data.role.size() >= 3 && data.role.size() <= 140
+        && data.organization is string && data.organization.size() >= 2 && data.organization.size() <= 160
+        && data.location is string && data.location.size() >= 2 && data.location.size() <= 100
+        && data.highlights is list && data.highlights.size() <= 8
+        && (data.highlights.size() == 0 || (data.highlights[0] is string && data.highlights[0].size() <= 400))
+        && data.sortOrder is number && data.sortOrder >= 0 && data.sortOrder <= 1000
+        && data.isPublished is bool
+        && data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: Certification
+    function isValidCertification(data) {
+      return data.keys().hasAll([
+          'year', 'name', 'issuer', 'credentialCode', 'scope',
+          'sortOrder', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'year', 'name', 'issuer', 'credentialCode', 'scope',
+          'sortOrder', 'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.year is string && data.year.size() == 4 && data.year.matches('^20[0-9]{2}$')
+        && data.name is string && data.name.size() >= 3 && data.name.size() <= 180
+        && data.issuer is string && data.issuer.size() >= 2 && data.issuer.size() <= 160
+        && data.credentialCode is string && data.credentialCode.size() >= 2 && data.credentialCode.size() <= 60
+        && data.scope is string && data.scope.size() >= 3 && data.scope.size() <= 240
+        && data.sortOrder is number && data.sortOrder >= 0 && data.sortOrder <= 1000
+        && data.isPublished is bool
+        && data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: PortfolioProfile
+    function isValidPortfolioProfile(data) {
+      return data.keys().hasAll([
+          'fullName', 'shortBrand', 'program', 'school', 'location',
+          'email', 'phone', 'headline', 'lead', 'availability',
+          'testimonialQuote', 'testimonialAuthor', 'testimonialRole', 'testimonialOrg',
+          'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'fullName', 'shortBrand', 'program', 'school', 'location',
+          'email', 'phone', 'headline', 'lead', 'availability',
+          'testimonialQuote', 'testimonialAuthor', 'testimonialRole', 'testimonialOrg',
+          'isPublished', 'authorUid', 'createdAt', 'updatedAt'
+        ])
+        && data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100
+        && data.shortBrand is string && data.shortBrand.size() >= 2 && data.shortBrand.size() <= 50
+        && data.program is string && data.program.size() >= 2 && data.program.size() <= 120
+        && data.school is string && data.school.size() >= 2 && data.school.size() <= 120
+        && data.location is string && data.location.size() >= 2 && data.location.size() <= 100
+        && isValidEmail(data.email)
+        && data.phone is string && data.phone.size() >= 5 && data.phone.size() <= 40
+        && data.headline is string && data.headline.size() >= 5 && data.headline.size() <= 160
+        && data.lead is string && data.lead.size() >= 10 && data.lead.size() <= 500
+        && data.availability is string && data.availability.size() >= 5 && data.availability.size() <= 180
+        && data.testimonialQuote is string && data.testimonialQuote.size() >= 10 && data.testimonialQuote.size() <= 600
+        && data.testimonialAuthor is string && data.testimonialAuthor.size() >= 2 && data.testimonialAuthor.size() <= 100
+        && data.testimonialRole is string && data.testimonialRole.size() >= 2 && data.testimonialRole.size() <= 120
+        && data.testimonialOrg is string && data.testimonialOrg.size() >= 2 && data.testimonialOrg.size() <= 140
         && data.isPublished is bool
         && data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128
         && data.createdAt is timestamp
@@ -131,11 +244,104 @@ service cloud.firestore {
         && incoming().createdAt == existing().createdAt
         && incoming().updatedAt == request.time
         && incoming().diff(existing()).affectedKeys().hasOnly([
-          'title', 'category', 'year', 'systemSpec', 'summary',
-          'challenge', 'solution', 'standardRef', 'role',
-          'components', 'isPublished', 'updatedAt'
+          'title', 'category', 'year', 'systemSpec', 'featured', 'imageUrl',
+          'summary', 'challenge', 'solution', 'standardRef', 'role',
+          'components', 'specs', 'sortOrder', 'isPublished', 'updatedAt'
         ]);
       allow delete: if isValidId(projectId) && isAdmin();
+    }
+
+    // Collection: /competencies/{competencyId}
+    match /competencies/{competencyId} {
+      allow get: if isValidId(competencyId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isBootstrappedAdmin();
+      allow create: if isValidId(competencyId)
+        && isAdmin()
+        && isValidCompetency(incoming())
+        && incoming().authorUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(competencyId)
+        && isAdmin()
+        && isValidCompetency(incoming())
+        && incoming().authorUid == existing().authorUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'number', 'title', 'description', 'tools', 'sortOrder', 'isPublished', 'updatedAt'
+        ]);
+      allow delete: if isValidId(competencyId) && isAdmin();
+    }
+
+    // Collection: /experiences/{experienceId}
+    match /experiences/{experienceId} {
+      allow get: if isValidId(experienceId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isBootstrappedAdmin();
+      allow create: if isValidId(experienceId)
+        && isAdmin()
+        && isValidExperience(incoming())
+        && incoming().authorUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(experienceId)
+        && isAdmin()
+        && isValidExperience(incoming())
+        && incoming().authorUid == existing().authorUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'period', 'role', 'organization', 'location', 'highlights',
+          'sortOrder', 'isPublished', 'updatedAt'
+        ]);
+      allow delete: if isValidId(experienceId) && isAdmin();
+    }
+
+    // Collection: /certifications/{certificationId}
+    match /certifications/{certificationId} {
+      allow get: if isValidId(certificationId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isBootstrappedAdmin();
+      allow create: if isValidId(certificationId)
+        && isAdmin()
+        && isValidCertification(incoming())
+        && incoming().authorUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(certificationId)
+        && isAdmin()
+        && isValidCertification(incoming())
+        && incoming().authorUid == existing().authorUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'year', 'name', 'issuer', 'credentialCode', 'scope',
+          'sortOrder', 'isPublished', 'updatedAt'
+        ]);
+      allow delete: if isValidId(certificationId) && isAdmin();
+    }
+
+    // Collection: /portfolioProfile/{profileId}
+    match /portfolioProfile/{profileId} {
+      allow get: if isValidId(profileId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isBootstrappedAdmin();
+      allow create: if isValidId(profileId)
+        && isAdmin()
+        && isValidPortfolioProfile(incoming())
+        && incoming().authorUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(profileId)
+        && isAdmin()
+        && isValidPortfolioProfile(incoming())
+        && incoming().authorUid == existing().authorUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'fullName', 'shortBrand', 'program', 'school', 'location',
+          'email', 'phone', 'headline', 'lead', 'availability',
+          'testimonialQuote', 'testimonialAuthor', 'testimonialRole', 'testimonialOrg',
+          'isPublished', 'updatedAt'
+        ]);
+      allow delete: if isValidId(profileId) && isAdmin();
     }
 
     // Collection: /inquiries/{inquiryId} (PII Isolated)
