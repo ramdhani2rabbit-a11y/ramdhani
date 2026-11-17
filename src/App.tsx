@@ -1,4 +1,4 @@
-import { useState, useRef, FormEvent } from 'react';
+import { useState, useRef, useEffect, FormEvent } from 'react';
 import {
   ArrowUpRight,
   Menu,
@@ -8,7 +8,27 @@ import {
   FileText,
   Mail,
   MapPin,
+  LogOut,
+  Trash2,
 } from 'lucide-react';
+import {
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  where,
+  serverTimestamp,
+} from 'firebase/firestore';
+import {
+  db,
+  BLUEPRINT_LIMITS,
+  OperationType,
+  handleFirestoreError,
+} from './firebase';
+import { useFirebase } from './contexts/FirebaseContext';
 import {
   STUDENT_PROFILE,
   HERO_METRICS,
@@ -42,7 +62,29 @@ const MARQUEE_ITEMS = [
   'standar puil 2011 & k3 listrik',
 ];
 
+type InquiryStatus = 'baru' | 'dibalas' | 'arsip';
+
+interface InquiryRecord {
+  id: string;
+  senderUid: string;
+  senderName: string;
+  senderEmail: string;
+  subject: string;
+  message: string;
+  status: InquiryStatus;
+}
+
 export default function App() {
+  const {
+    user,
+    authReady,
+    isAdmin,
+    authLoading,
+    authError,
+    signInWithGoogle,
+    signOutUser,
+  } = useFirebase();
+
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>('Semua');
   const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
@@ -53,12 +95,61 @@ export default function App() {
   const [senderEmail, setSenderEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [formStatus, setFormStatus] = useState<'idle' | 'error' | 'submitted'>('idle');
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'error' | 'submitted'>('idle');
   const [formError, setFormError] = useState('');
   const [emailCopied, setEmailCopied] = useState(false);
+  const [inquiries, setInquiries] = useState<InquiryRecord[]>([]);
 
   const contactSectionRef = useRef<HTMLElement | null>(null);
   const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setSenderName((prev) => prev || user.displayName || '');
+      setSenderEmail((prev) => prev || user.email || '');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!authReady || !user || !user.emailVerified) {
+      setInquiries([]);
+      return;
+    }
+
+    const inquiriesQuery = isAdmin
+      ? collection(db, 'inquiries')
+      : query(
+          collection(db, 'inquiries'),
+          where('senderUid', '==', user.uid)
+        );
+
+    const unsubscribe = onSnapshot(
+      inquiriesQuery,
+      (snapshot) => {
+        const rows: InquiryRecord[] = snapshot.docs.map((docSnap) => {
+          const data = docSnap.data();
+          const rawStatus = data.status;
+          const status: InquiryStatus =
+            rawStatus === 'dibalas' || rawStatus === 'arsip' ? rawStatus : 'baru';
+          return {
+            id: docSnap.id,
+            senderUid: String(data.senderUid ?? ''),
+            senderName: String(data.senderName ?? ''),
+            senderEmail: String(data.senderEmail ?? ''),
+            subject: String(data.subject ?? ''),
+            message: String(data.message ?? ''),
+            status,
+          };
+        });
+        setInquiries(rows);
+      },
+      (error) => {
+        handleFirestoreError(error, OperationType.LIST, 'inquiries');
+      }
+    );
+
+    return () => unsubscribe();
+  }, [authReady, user, isAdmin]);
 
   const filteredProjects =
     selectedCategory === 'Semua'
@@ -67,7 +158,7 @@ export default function App() {
 
   const handleRequestDiscussion = (projectTitle: string) => {
     setActiveProject(null);
-    setSubject(`Diskusi Proyek: ${projectTitle}`);
+    setSubject(`Diskusi Proyek: ${projectTitle}`.slice(0, BLUEPRINT_LIMITS.inquiry.subjectMax));
     setFormStatus('idle');
     setTimeout(() => {
       contactSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -85,26 +176,104 @@ export default function App() {
     }
   };
 
-  const handleContactSubmit = (e: FormEvent) => {
+  const handleContactSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!senderName.trim() || !senderEmail.trim() || !message.trim()) {
+
+    let activeUser = user;
+    if (!activeUser) {
+      activeUser = await signInWithGoogle();
+      if (!activeUser) return;
+    }
+
+    if (!activeUser.emailVerified) {
       setFormStatus('error');
-      setFormError('Mohon lengkapi nama, alamat email, dan isi pesan sebelum mengirim.');
+      setFormError('Akun Google Anda harus terverifikasi untuk mengirim pesan ke basis data.');
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(senderEmail.trim())) {
+
+    const cleanName = (senderName.trim() || activeUser.displayName || '').slice(
+      0,
+      BLUEPRINT_LIMITS.inquiry.nameMax
+    );
+    const cleanEmail = (senderEmail.trim() || activeUser.email || '').slice(
+      0,
+      BLUEPRINT_LIMITS.inquiry.emailMax
+    );
+    const cleanSubject = (
+      subject.trim() || 'Diskusi Portofolio Ketenagalistrikan'
+    ).slice(0, BLUEPRINT_LIMITS.inquiry.subjectMax);
+    const cleanMessage = message.trim().slice(0, BLUEPRINT_LIMITS.inquiry.messageMax);
+
+    if (
+      cleanName.length < BLUEPRINT_LIMITS.inquiry.nameMin ||
+      cleanEmail.length < BLUEPRINT_LIMITS.inquiry.emailMin ||
+      cleanMessage.length < BLUEPRINT_LIMITS.inquiry.messageMin
+    ) {
+      setFormStatus('error');
+      setFormError(
+        'Mohon lengkapi nama (min. 2 karakter), alamat email, dan pesan (min. 5 karakter).'
+      );
+      return;
+    }
+
+    if (!BLUEPRINT_LIMITS.inquiry.emailPattern.test(cleanEmail)) {
       setFormStatus('error');
       setFormError('Format alamat email belum valid. Mohon periksa kembali.');
       return;
     }
 
     setFormError('');
-    setFormStatus('submitted');
+    setFormStatus('submitting');
+
+    const inquiryId = `inq-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const path = `inquiries/${inquiryId}`;
+
+    try {
+      await setDoc(doc(db, 'inquiries', inquiryId), {
+        senderUid: activeUser.uid,
+        senderName: cleanName,
+        senderEmail: cleanEmail,
+        subject: cleanSubject,
+        message: cleanMessage,
+        status: 'baru',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      setSenderName(cleanName);
+      setSenderEmail(cleanEmail);
+      setSubject(cleanSubject);
+      setFormStatus('submitted');
+    } catch (error) {
+      setFormStatus('error');
+      handleFirestoreError(error, OperationType.CREATE, path);
+    }
+  };
+
+  const handleUpdateInquiryStatus = async (
+    inquiryId: string,
+    nextStatus: InquiryStatus
+  ) => {
+    const path = `inquiries/${inquiryId}`;
+    try {
+      await updateDoc(doc(db, 'inquiries', inquiryId), {
+        status: nextStatus,
+        updatedAt: serverTimestamp(),
+      });
+    } catch (error) {
+      handleFirestoreError(error, OperationType.UPDATE, path);
+    }
+  };
+
+  const handleDeleteInquiry = async (inquiryId: string) => {
+    const path = `inquiries/${inquiryId}`;
+    try {
+      await deleteDoc(doc(db, 'inquiries', inquiryId));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.DELETE, path);
+    }
   };
 
   const handleResetForm = () => {
-    setSenderName('');
-    setSenderEmail('');
     setSubject('');
     setMessage('');
     setFormStatus('idle');
@@ -655,11 +824,53 @@ export default function App() {
                     <MapPin className="w-4 h-4 text-slate-500 shrink-0" aria-hidden="true" />
                     <span>{STUDENT_PROFILE.location}</span>
                   </div>
+
+                  {/* Authenticated Session Summary */}
+                  <div className="pt-4 border-t border-slate-200 space-y-2.5">
+                    {user ? (
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-xs font-medium text-slate-900 truncate">
+                            {user.displayName || user.email}
+                            {isAdmin ? ' · Admin Portofolio' : ''}
+                          </p>
+                          <p className="text-xs font-mono text-slate-500 truncate">
+                            {user.email}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={signOutUser}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                          <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
+                          <span>Keluar</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <p className="text-xs text-slate-500">
+                          Masuk dengan Google untuk menyimpan pesan ke Firestore.
+                        </p>
+                        <button
+                          type="button"
+                          disabled={authLoading}
+                          onClick={signInWithGoogle}
+                          className="px-3.5 py-2 text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                          {authLoading ? 'Menghubungkan...' : 'Masuk dengan Google'}
+                        </button>
+                      </div>
+                    )}
+                    {authError && (
+                      <p className="text-xs text-amber-800">{authError}</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Right Interactive Contact Form */}
-              <div className="lg:col-span-7">
+              {/* Right Interactive Contact Form & Firestore Inquiry List */}
+              <div className="lg:col-span-7 space-y-6">
                 <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200">
                   {formStatus === 'submitted' ? (
                     <div className="space-y-4 py-4">
@@ -667,15 +878,14 @@ export default function App() {
                         <Check className="w-5 h-5" aria-hidden="true" />
                       </div>
                       <h3 className="text-lg font-semibold text-slate-950">
-                        Pesan Anda Berhasil Dicatat
+                        Pesan Tersimpan di Basis Data
                       </h3>
                       <p className="text-sm text-slate-600 leading-relaxed">
                         Terima kasih, <span className="font-medium text-slate-900">{senderName}</span>. Pesan terkait{' '}
                         <span className="font-medium text-slate-900">
                           {subject || 'peluang kerja / wawancara'}
                         </span>{' '}
-                        telah disiapkan. Untuk korespondensi langsung, silakan hubungi juga melalui{' '}
-                        <span className="font-mono text-slate-900">{STUDENT_PROFILE.email}</span>.
+                        telah tersimpan dengan status <span className="font-mono text-slate-900">baru</span>.
                       </p>
                       <button
                         type="button"
@@ -707,6 +917,7 @@ export default function App() {
                           <input
                             id="contact-name"
                             type="text"
+                            maxLength={BLUEPRINT_LIMITS.inquiry.nameMax}
                             value={senderName}
                             onChange={(e) => setSenderName(e.target.value)}
                             placeholder="Contoh: Budi Santoso — PT Daya Mitra"
@@ -724,6 +935,7 @@ export default function App() {
                           <input
                             id="contact-email"
                             type="email"
+                            maxLength={BLUEPRINT_LIMITS.inquiry.emailMax}
                             value={senderEmail}
                             onChange={(e) => setSenderEmail(e.target.value)}
                             placeholder="nama@perusahaan.co.id"
@@ -742,6 +954,7 @@ export default function App() {
                         <input
                           id="contact-subject"
                           type="text"
+                          maxLength={BLUEPRINT_LIMITS.inquiry.subjectMax}
                           value={subject}
                           onChange={(e) => setSubject(e.target.value)}
                           placeholder="Undangan wawancara teknisi / permintaan diagram proyek"
@@ -760,6 +973,7 @@ export default function App() {
                           id="contact-message"
                           ref={messageInputRef}
                           rows={4}
+                          maxLength={BLUEPRINT_LIMITS.inquiry.messageMax}
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
                           placeholder="Tuliskan jadwal wawancara, posisi yang ditawarkan, atau detail proyek yang ingin didiskusikan..."
@@ -773,14 +987,84 @@ export default function App() {
                         </p>
                         <button
                           type="submit"
-                          className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                          disabled={formStatus === 'submitting' || authLoading}
+                          className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
-                          Kirim Pesan
+                          {formStatus === 'submitting'
+                            ? 'Mengirim...'
+                            : user
+                            ? 'Kirim Pesan'
+                            : 'Masuk Google & Kirim'}
                         </button>
                       </div>
                     </form>
                   )}
                 </div>
+
+                {/* Real-time Firestore Inquiries List (Scoped to Owner or Admin) */}
+                {user && inquiries.length > 0 && (
+                  <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-slate-950">
+                        {isAdmin
+                          ? `Kotak Masuk Pesan Portofolio (${inquiries.length})`
+                          : `Riwayat Pesan Terkirim (${inquiries.length})`}
+                      </h3>
+                    </div>
+
+                    <div className="divide-y divide-slate-200">
+                      {inquiries.map((item) => (
+                        <div key={item.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
+                          <div className="flex flex-wrap items-baseline justify-between gap-2">
+                            <p className="text-sm font-semibold text-slate-950">
+                              {item.subject}
+                            </p>
+                            <span className="text-xs font-mono text-slate-600">
+                              Status: {item.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500">
+                            {item.senderName} · {item.senderEmail}
+                          </p>
+                          <p className="text-sm text-slate-700 leading-relaxed">
+                            {item.message}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-2 pt-1">
+                            {isAdmin && (
+                              <>
+                                {(['baru', 'dibalas', 'arsip'] as const).map((st) => (
+                                  <button
+                                    key={st}
+                                    type="button"
+                                    disabled={item.status === st}
+                                    onClick={() => handleUpdateInquiryStatus(item.id, st)}
+                                    className={`px-2.5 py-1 text-xs font-medium rounded-md border transition-colors ${
+                                      item.status === st
+                                        ? 'bg-slate-900 text-white border-slate-900'
+                                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                                    }`}
+                                  >
+                                    {st}
+                                  </button>
+                                ))}
+                              </>
+                            )}
+                            {(isAdmin || item.status === 'baru') && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteInquiry(item.id)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs text-slate-600 hover:text-slate-950 rounded-md hover:bg-slate-100 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                                <span>Hapus</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

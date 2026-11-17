@@ -1,0 +1,272 @@
+{
+  "entities": {
+    "PortfolioProject": {
+      "title": "PortfolioProject",
+      "description": "Proyek teknik ketenagalistrikan pada portofolio siswa (non-PII).",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 160,
+          "description": "Judul proyek instalasi atau pengujian listrik."
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Panel & Distribusi",
+            "Otomasi PLC",
+            "Energi Terbarukan",
+            "Proteksi & Uji"
+          ],
+          "description": "Kategori kompetensi proyek."
+        },
+        "year": {
+          "type": "string",
+          "pattern": "^20[0-9]{2}$",
+          "minLength": 4,
+          "maxLength": 4,
+          "description": "Tahun pelaksanaan proyek."
+        },
+        "systemSpec": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 80,
+          "description": "Ringkasan parameter tegangan/sistem."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 600,
+          "description": "Ringkasan proyek."
+        },
+        "challenge": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 800,
+          "description": "Tantangan teknis yang diselesaikan."
+        },
+        "solution": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 800,
+          "description": "Solusi implementasi teknik."
+        },
+        "standardRef": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Acuan standar keselamatan dan instalasi (mis. PUIL 2011)."
+        },
+        "role": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Peran siswa pada proyek."
+        },
+        "components": {
+          "type": "array",
+          "description": "Daftar komponen utama (maksimal 12 item)."
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Status publikasi proyek pada halaman portofolio."
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID admin pembuat dokumen proyek."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pembuatan dokumen dari server."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pembaruan terakhir dari server."
+        }
+      },
+      "required": [
+        "title",
+        "category",
+        "year",
+        "systemSpec",
+        "summary",
+        "challenge",
+        "solution",
+        "standardRef",
+        "role",
+        "components",
+        "isPublished",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ContactInquiry": {
+      "title": "ContactInquiry",
+      "description": "Pesan kontak atau undangan wawancara dari perekrut/pembimbing yang terautentikasi.",
+      "type": "object",
+      "properties": {
+        "senderUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID pengirim yang terautentikasi."
+        },
+        "senderName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Nama pengirim atau instansi."
+        },
+        "senderEmail": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 150,
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "description": "Alamat email pengirim."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160,
+          "description": "Topik diskusi atau undangan wawancara."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 2000,
+          "description": "Isi pesan lengkap."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["baru", "dibalas", "arsip"],
+          "description": "Status tindak lanjut pesan."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pengiriman dari server."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pembaruan status dari server."
+        }
+      },
+      "required": [
+        "senderUid",
+        "senderName",
+        "senderEmail",
+        "subject",
+        "message",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SavedCalculation": {
+      "title": "SavedCalculation",
+      "description": "Catatan hasil verifikasi perhitungan arus nominal dan MCB berbasis PUIL milik pengguna.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID pemilik catatan perhitungan."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Nama beban atau panel."
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["3-phase", "1-phase"],
+          "description": "Sistem fasa listrik."
+        },
+        "powerKw": {
+          "type": "number",
+          "description": "Daya aktif beban dalam kW."
+        },
+        "powerFactor": {
+          "type": "number",
+          "description": "Faktor daya cos phi."
+        },
+        "nominalCurrent": {
+          "type": "number",
+          "description": "Arus nominal terhitung dalam Ampere."
+        },
+        "recommendedMcb": {
+          "type": "number",
+          "description": "Rating MCB yang direkomendasikan dalam Ampere."
+        },
+        "cableRecommendation": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 60,
+          "description": "Rekomendasi ukuran kabel tembaga."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu penyimpanan dari server."
+        }
+      },
+      "required": [
+        "ownerUid",
+        "label",
+        "phase",
+        "powerKw",
+        "powerFactor",
+        "nominalCurrent",
+        "recommendedMcb",
+        "cableRecommendation",
+        "createdAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Dokumen penanda akun admin pengelola portofolio.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 150,
+          "description": "Email admin terverifikasi."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu penambahan admin."
+        }
+      },
+      "required": ["email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/PortfolioProject" },
+      "description": "Daftar proyek ketenagalistrikan portofolio siswa."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/ContactInquiry" },
+      "description": "Pesan masuk dan undangan wawancara yang terisolasi per pengirim dan admin."
+    },
+    "/calculations/{calcId}": {
+      "schema": { "$ref": "#/entities/SavedCalculation" },
+      "description": "Riwayat perhitungan verifikasi arus dan MCB milik pengguna."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Daftar UID administrator portofolio."
+    }
+  }
+}
