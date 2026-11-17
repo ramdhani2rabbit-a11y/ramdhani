@@ -1,0 +1,6 @@
+{
+  "name": "Nadia Kusuma — Portofolio Ketenagalistrikan",
+  "description": "Portofolio digital siswa Teknik Instalasi Tenaga Listrik yang memuat proyek panel distribusi, otomasi PLC, pembangkit surya, dan pengujian proteksi sesuai standar PUIL 2011.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
