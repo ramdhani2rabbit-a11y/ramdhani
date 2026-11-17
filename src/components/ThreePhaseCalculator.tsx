@@ -186,29 +186,29 @@ export function ThreePhaseCalculator() {
   };
 
   return (
-    <div className="border border-slate-200 rounded-2xl bg-white p-6 sm:p-8 space-y-6">
+    <div className="border border-slate-800 rounded-2xl bg-[#0D1322] p-6 sm:p-8 space-y-6 text-slate-100">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
-          <h3 className="text-lg font-semibold text-slate-950">
+          <h3 className="text-lg font-semibold text-white">
             Kalkulator Verifikasi Arus & Proteksi PUIL
           </h3>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-400">
             Alat bantu cepat menghitung arus nominal beban, daya semu, serta estimasi rating MCB dan penampang kabel tembaga.
           </p>
         </div>
 
         <div
-          className="inline-flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200"
+          className="inline-flex items-center p-1 bg-[#070B14] rounded-lg border border-slate-800"
           role="group"
           aria-label="Pilih sistem fasa"
         >
           <button
             type="button"
             onClick={() => setPhase('3-phase')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
               phase === '3-phase'
-                ? 'bg-white text-slate-950 shadow-xs'
-                : 'text-slate-600 hover:text-slate-950'
+                ? 'bg-amber-400 text-slate-950 font-semibold'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             3-Fasa (380 V)
@@ -216,10 +216,10 @@ export function ThreePhaseCalculator() {
           <button
             type="button"
             onClick={() => setPhase('1-phase')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
               phase === '1-phase'
-                ? 'bg-white text-slate-950 shadow-xs'
-                : 'text-slate-600 hover:text-slate-950'
+                ? 'bg-amber-400 text-slate-950 font-semibold'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             1-Fasa (220 V)
@@ -232,7 +232,7 @@ export function ThreePhaseCalculator() {
           <div>
             <label
               htmlFor="calc-power-kw"
-              className="block text-xs font-medium text-slate-700 mb-1.5"
+              className="block text-xs font-medium text-slate-300 mb-1.5"
             >
               Daya Aktif Beban (kW)
             </label>
@@ -244,14 +244,14 @@ export function ThreePhaseCalculator() {
               step="0.5"
               value={powerKw}
               onChange={(e) => setPowerKw(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums text-slate-950 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
+              className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums text-white bg-[#070B14] border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="calc-pf"
-              className="block text-xs font-medium text-slate-700 mb-1.5"
+              className="block text-xs font-medium text-slate-300 mb-1.5"
             >
               Faktor Daya (cos φ)
             </label>
@@ -263,16 +263,16 @@ export function ThreePhaseCalculator() {
               step="0.01"
               value={powerFactor}
               onChange={(e) => setPowerFactor(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums text-slate-950 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
+              className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums text-white bg-[#070B14] border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
           </div>
         </div>
 
         <div className="lg:col-span-7 space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 p-6 rounded-xl bg-slate-950 text-white border border-slate-800">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 p-6 rounded-xl bg-[#070B14] text-white border border-slate-800">
             <div>
               <p className="text-xs text-slate-400 mb-1.5">Arus Nominal (In)</p>
-              <p className="text-2xl font-semibold font-mono tabular-nums text-white">
+              <p className="text-2xl font-semibold font-mono tabular-nums text-sky-400">
                 {calculation.nominalCurrent.toFixed(1)} A
               </p>
             </div>
@@ -284,7 +284,7 @@ export function ThreePhaseCalculator() {
             </div>
             <div>
               <p className="text-xs text-slate-400 mb-1.5">Rekomendasi MCB</p>
-              <p className="text-2xl font-semibold font-mono tabular-nums text-blue-400">
+              <p className="text-2xl font-semibold font-mono tabular-nums text-amber-400">
                 {calculation.recommendedMcb} A
               </p>
             </div>
@@ -305,13 +305,13 @@ export function ThreePhaseCalculator() {
               value={calcLabel}
               onChange={(e) => setCalcLabel(e.target.value)}
               placeholder="Nama beban (mis. Motor Kompresor)"
-              className="flex-1 px-3.5 py-2 text-sm text-slate-950 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
+              className="flex-1 px-3.5 py-2 text-sm text-white bg-[#070B14] border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-slate-500"
             />
             <button
               type="button"
               disabled={saveState === 'saving' || authLoading}
               onClick={handleSaveCalculation}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 disabled:opacity-60 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <BookmarkCheck className="w-3.5 h-3.5" aria-hidden="true" />
               <span>
@@ -327,7 +327,7 @@ export function ThreePhaseCalculator() {
           {saveFeedback && (
             <p
               className={`text-xs ${
-                saveState === 'error' ? 'text-amber-700' : 'text-blue-700'
+                saveState === 'error' ? 'text-amber-300' : 'text-sky-400'
               }`}
             >
               {saveFeedback}
@@ -336,37 +336,37 @@ export function ThreePhaseCalculator() {
         </div>
       </div>
 
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-slate-400">
         Rumus: {phase === '3-phase' ? 'I = P / (√3 × 380 V × cos φ)' : 'I = P / (220 V × cos φ)'} dengan faktor pengaman proteksi 125% sesuai pedoman instalasi dasar.
       </p>
 
       {/* Real-time Saved Calculations History for Authenticated User */}
       {user && savedRecords.length > 0 && (
-        <div className="pt-5 border-t border-slate-200 space-y-3">
-          <p className="text-xs font-semibold text-slate-800">
+        <div className="pt-5 border-t border-slate-800 space-y-3">
+          <p className="text-xs font-semibold text-slate-200">
             Riwayat Perhitungan Tersimpan ({savedRecords.length})
           </p>
-          <div className="divide-y divide-slate-200 border border-slate-200 rounded-xl overflow-hidden">
+          <div className="divide-y divide-slate-800 border border-slate-800 rounded-xl overflow-hidden">
             {savedRecords.map((rec) => (
               <div
                 key={rec.id}
-                className="px-4 py-3 flex flex-wrap items-center justify-between gap-3 bg-slate-50/60 text-xs"
+                className="px-4 py-3 flex flex-wrap items-center justify-between gap-3 bg-[#070B14] text-xs"
               >
                 <div className="space-y-0.5">
-                  <p className="font-medium text-slate-900">{rec.label}</p>
-                  <p className="font-mono text-slate-500 tabular-nums">
+                  <p className="font-medium text-white">{rec.label}</p>
+                  <p className="font-mono text-slate-400 tabular-nums">
                     {rec.phase === '3-phase' ? '3-Fasa' : '1-Fasa'} · {rec.powerKw} kW · cos φ {rec.powerFactor}
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-mono text-slate-800 tabular-nums">
+                  <span className="font-mono text-slate-200 tabular-nums">
                     In {rec.nominalCurrent.toFixed(1)} A · MCB {rec.recommendedMcb} A · {rec.cableRecommendation}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleDeleteRecord(rec.id)}
                     aria-label={`Hapus catatan ${rec.label}`}
-                    className="p-1.5 text-slate-500 hover:text-slate-900 rounded-md hover:bg-slate-200/70 transition-colors"
+                    className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>

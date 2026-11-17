@@ -1,4 +1,4 @@
-import heroElectricalStudentImg from '../assets/images/hero_electrical_student_1794890035668.jpg';
+import heroMaleTechnicianImg from '../assets/images/hero_male_technician_1794895245140.jpg';
 import projectPanelPhbImg from '../assets/images/project_panel_phb_1794890036081.jpg';
 import projectPlcMotorImg from '../assets/images/project_plc_motor_1794890036957.jpg';
 import projectSolarPltsImg from '../assets/images/project_solar_plts_1794890036712.jpg';
@@ -58,20 +58,21 @@ export interface CertificationItem {
 }
 
 export const STUDENT_PROFILE = {
-  fullName: 'Nadia Kusuma Putri',
-  shortBrand: 'Nadia Kusuma',
+  fullName: 'Raka Pratama Putra',
+  shortBrand: 'Raka Pratama',
   program: 'Teknik Instalasi Tenaga Listrik (TITL)',
   school: 'SMKN 2 Bandung · Angkatan 2026',
   location: 'Bandung, Jawa Barat',
-  email: 'nadia.kusuma.titl@example.id',
+  email: 'raka.pratama.titl@example.id',
   phone: '+62 812-3456-7890',
-  heroImage: heroElectricalStudentImg,
+  heroImage: heroMaleTechnicianImg,
   heroImageAlt:
-    'Nadia Kusuma mengenakan kacamata pelindung dan seragam kerja teknik listrik sedang menguji panel distribusi 3-fasa menggunakan tang ampere digital di laboratorium',
-  headline: 'Merancang Sistem Kelistrikan yang Aman, Presisi, dan Terukur.',
+    'Raka Pratama mengenakan kacamata pelindung, sarung tangan isolasi, dan jaket teknisi listrik menguji panel switchgear 3-fasa menggunakan multimeter digital',
+  headline: 'Merancang Sistem Listrik & Proteksi yang Tangguh dan Presisi.',
   lead:
-    'Siswa tingkat akhir Teknik Instalasi Tenaga Listrik dengan fokus pada perakitan Panel Hubung Bagi 3-fasa, pemrograman PLC industri, integrasi PLTS atap, serta pengujian proteksi berbasis PUIL 2011.',
-  availability: 'Terbuka untuk Rekrutmen Teknisi Listrik, Magang Lanjutan, dan Asisten Engineer DUDI',
+    'Siswa dan calon teknisi muda ketenagalistrikan dengan spesialisasi perakitan Panel Hubung Bagi 3-fasa, proteksi petir & pembumian, otomasi PLC industri, serta komisioning berbasis PUIL 2011.',
+  availability:
+    'Siap Bergabung untuk Posisi Teknisi Listrik Industri, Panel Maker & Pemeliharaan Gardu',
 };
 
 export const HERO_METRICS = [
@@ -109,11 +110,11 @@ export const PROJECTS: PortfolioProject[] = [
     imageAlt:
       'Interior panel distribusi utama 3-fasa dengan susunan busbar tembaga presisi, pemutus tenaga MCCB, MCB cabang, dan meter daya digital',
     summary:
-      'Perancangan tata letak, pembengkokan busbar tembaga, pengawatan sistem kendali, dan komisioning panel distribusi utama untuk beban bengkel pemesinan berkapasitas 35 kVA.',
+      'Perancangan tata letak, pembengkokan busbar tembaga, pengawatan sistem kendali, dan komisioning panel distribusi utama dengan proteksi surja petir SPD untuk beban bengkel 35 kVA.',
     challenge:
-      'Memastikan pembagian beban antar fasa R, S, dan T tetap seimbang (ketidakseimbangan < 5%) serta menjaga jarak bebas isolasi antar busbar sesuai standar keselamatan kerja.',
+      'Memastikan pembagian beban antar fasa R, S, dan T tetap seimbang (ketidakseimbangan < 5%) serta melindungi peralatan ukur sensitif dari lonjakan tegangan transien.',
     solution:
-      'Menerapkan skema warna kabel SNI terbaru (cokelat, hitam, abu-abu, biru, kuning-hijau), pemasangan power quality meter digital untuk pemantauan THD serta faktor daya real-time, dan penomoran ferul pada setiap terminal.',
+      'Menerapkan skema warna kabel SNI terbaru, memasang Surge Protection Device (SPD) Tipe 2 pada rel utama, power quality meter digital untuk pemantauan THD real-time, serta penomoran ferul pada setiap terminal.',
     standardRef: 'PUIL 2011 / SNI 0225 & IEC 61439',
     role: 'Perancang Single Line Diagram, Perakit Busbar & Penguji Komisioning',
     components: [
@@ -121,7 +122,7 @@ export const PROJECTS: PortfolioProject[] = [
       'Digital Power Meter 3-Fasa (V, A, kW, cos φ, THD)',
       'Busbar Tembaga Elektrolitik 20×5 mm',
       'MCB Cabang Kurva C (10A, 16A, 25A) & RCCB 30 mA',
-      'Surge Protection Device (SPD) Tipe 2',
+      'Surge Protection Device (SPD) Tipe 2 — 40 kA',
     ],
     specs: [
       { label: 'Tegangan Nominal', value: '400 V L-L / 230 V L-N' },
@@ -174,17 +175,17 @@ export const PROJECTS: PortfolioProject[] = [
     imageAlt:
       'Susunan panel surya monokristalin di atap gedung bersama inverter dan kotak penggabung DC terpasang rapi di dinding',
     summary:
-      'Perencanaan kapasitas, pemasangan string panel surya monokristalin, kotak proteksi DC Combiner, hingga sinkronisasi inverter hibrida untuk suplai penerangan ruang praktik.',
+      'Perencanaan kapasitas, pemasangan string panel surya monokristalin, kotak proteksi DC Combiner dengan arrester petir, hingga sinkronisasi inverter hibrida.',
     challenge:
-      'Mengantisipasi penurunan tegangan DC pada jalur kabel atap ke ruang panel serta melindungi inverter dari sambaran petir tidak langsung di musim hujan.',
+      'Mengantisipasi penurunan tegangan DC pada jalur kabel atap ke ruang panel serta melindungi inverter dari induksi sambaran petir tidak langsung di area terbuka.',
     solution:
       'Menghitung luas penampang kabel PV 6 mm² (rugi tegangan < 1,5%), memasang DC Surge Arrester 1000 VDC serta sekering gPV pada setiap string di dalam DC Combiner Box tahan cuaca IP65.',
     standardRef: 'SNI IEC 62548 & Permen ESDM PLTS Atap',
-    role: 'Anggota Tim Instalasi Array, Proteksi DC & Pengujian Voc/Isc',
+    role: 'Teknisi Instalasi Array, Proteksi Petir DC & Pengujian Voc/Isc',
     components: [
       '6× Modul Surya Monokristalin 550 Wp',
       'Inverter Hibrida 5 kVA MPPT',
-      'DC Combiner Box (MCB DC 16A, Fuse gPV, SPD DC)',
+      'DC Combiner Box (MCB DC 16A, Fuse gPV, SPD DC 1000V)',
       'Kabel Solar TUV 1×6 mm² (Merah/Hitam)',
       'Konduit Baja Galvanis Tahan UV',
     ],
@@ -198,7 +199,7 @@ export const PROJECTS: PortfolioProject[] = [
   },
   {
     id: 'audit-pembumian-isolasi',
-    title: 'Audit Tahanan Pembumian & Isolasi Jaringan Bengkel Tegangan Rendah',
+    title: 'Audit Pembumian, Proteksi Petir & Tahanan Isolasi Jaringan Bengkel',
     category: 'Proteksi & Uji',
     year: '2026',
     systemSpec: 'Megger 500V · Metode 3-Titik',
@@ -206,19 +207,19 @@ export const PROJECTS: PortfolioProject[] = [
     imageAlt:
       'Alat ukur digital tahanan pembumian Megger terhubung ke busbar grounding tembaga di ruang panel listrik',
     summary:
-      'Pengujian berkala tahanan elektroda pembumian sistem TN-S dan tahanan isolasi penghantar antar panel guna mencegah bahaya tegangan sentuh tidak langsung.',
+      'Pengujian berkala tahanan elektroda pembumian sistem penangkal petir & sistem TN-S serta tahanan isolasi penghantar antar panel guna mencegah bahaya tegangan sentuh.',
     challenge:
-      'Mengidentifikasi penyebab nilai resistansi tanah yang sempat naik di atas 6 Ω pada area tanah berpasir selama musim kemarau.',
+      'Mengidentifikasi penyebab nilai resistansi tanah yang sempat naik di atas 6 Ω pada area tanah berpasir selama musim kemarau sehingga berisiko saat pelepasan arus gangguan petir.',
     solution:
       'Melakukan pengukuran metode jatuh potensial 3-titik, merekomendasikan penambahan batang elektroda paralel dengan jarak 2× panjang elektroda dan bahan pembenah tanah bentonit sehingga resistansi turun ke 1,82 Ω.',
-    standardRef: 'PUIL 2011 Bagian 5-54 (Pembumian) & IEEE Std 81',
+    standardRef: 'PUIL 2011 Bagian 5-54, SNI 03-7015 & IEEE Std 81',
     role: 'Teknisi Pengujian Alat Ukur Presisi & Penyusun Laporan Audit K3',
     components: [
       'Digital Earth Resistance Tester 3-Pole',
       'Insulation Tester 500V / 1000V DC',
-      'Busbar Tembaga PE Utama 30×5 mm',
+      'Busbar Tembaga PE & Arrester 30×5 mm',
       'Batang Elektroda Copper-Bonded 5/8" (2,4 m)',
-      'Kabel Penghantar PE NYA 16 mm² Kuning-Hijau',
+      'Kabel Penghantar BC / NYA 16 mm² Kuning-Hijau',
     ],
     specs: [
       { label: 'Resistansi Awal', value: '6,45 Ω (Tidak Memenuhi)' },
@@ -247,10 +248,10 @@ export const COMPETENCIES: CompetencyItem[] = [
   },
   {
     number: '03.',
-    title: 'Sistem Proteksi, Pembumian & Keselamatan K3',
+    title: 'Proteksi Petir, Pembumian & Keselamatan K3',
     description:
-      'Melaksanakan inspeksi kelayakan operasi instalasi menggunakan Insulation Tester (Megger), Earth Ground Tester, dan Phase Sequence Indicator dengan prosedur Lockout-Tagout (LOTO).',
-    tools: 'Digital Earth Tester · Insulation Tester · RCD Tester · Prosedur LOTO',
+      'Melaksanakan inspeksi kelayakan operasi instalasi, pemasangan Surge Protection Device (SPD), pengujian tahanan tanah, dan isolasi penghantar dengan prosedur ketat Lockout-Tagout (LOTO).',
+    tools: 'Digital Earth Tester · Megger 1000V · RCD Tester · Prosedur LOTO',
   },
   {
     number: '04.',
@@ -264,12 +265,12 @@ export const COMPETENCIES: CompetencyItem[] = [
 export const EXPERIENCES: ExperienceItem[] = [
   {
     period: 'Juli – Desember 2025',
-    role: 'Siswa Praktik Kerja Lapangan (Divisi Pemeliharaan Distribusi)',
+    role: 'Teknisi Praktik Kerja Lapangan (Divisi Pemeliharaan Distribusi)',
     organization: 'PT PLN (Persero) UP3 Bandung — Unit Layanan Pelanggan',
     location: 'Bandung, Jawa Barat',
     highlights: [
       'Mendampingi tim inspeksi gardu distribusi 20 kV / 380 V dalam pengukuran beban puncak malam dan penyeimbangan beban fasa R-S-T pada 14 gardu portal.',
-      'Membantu pencatatan dan pemeriksaan tahanan pembumian PHB-TR menggunakan Earth Clamp Tester dengan akurasi pelaporan harian.',
+      'Melaksanakan pemeriksaan tahanan pembumian PHB-TR dan arrester gardu menggunakan Earth Clamp Tester dengan akurasi pelaporan harian.',
       'Menyusun rekapitulasi dokumentasi teknis pemeliharaan panel LV (Low Voltage) yang mempercepat pelacakan riwayat perbaikan sebesar 25% di tim unit.',
     ],
   },
@@ -287,7 +288,7 @@ export const EXPERIENCES: ExperienceItem[] = [
 
 export const TESTIMONIAL = {
   quote:
-    'Selama enam bulan praktik lapangan, Nadia menunjukkan ketelitian tinggi dalam membaca diagram pengawatan serta disiplin ketat terhadap prosedur keselamatan K3 dan LOTO. Catatan pengukuran beban gardu yang disusunnya langsung membantu tim kami menstabilkan ketidakseimbangan fasa di tiga penyulang.',
+    'Selama enam bulan praktik lapangan, Raka menunjukkan ketangguhan kerja di gardu distribusi, ketelitian dalam membaca diagram pengawatan, serta disiplin ketat terhadap prosedur K3 dan LOTO. Catatan pengukuran beban gardu dan pembumian arrester yang disusunnya langsung membantu tim kami menstabilkan tiga penyulang.',
   author: 'Ir. Hendra Wijaya, S.T.',
   role: 'Supervisor Pemeliharaan Jaringan Distribusi',
   organization: 'PT PLN (Persero) UP3 Bandung',

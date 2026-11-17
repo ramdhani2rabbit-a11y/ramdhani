@@ -23,10 +23,10 @@ export function ResilientImage({
       <div
         role="img"
         aria-label={alt}
-        className={`flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50/60 border border-slate-200 text-slate-600 p-6 text-center ${containerClassName}`}
+        className={`flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 text-slate-300 p-6 text-center ${containerClassName}`}
       >
-        <Zap className="w-8 h-8 text-blue-600 mb-3" aria-hidden="true" />
-        <p className="text-sm font-medium text-slate-800 max-w-xs">
+        <Zap className="w-8 h-8 text-amber-400 mb-3" aria-hidden="true" />
+        <p className="text-sm font-medium text-slate-200 max-w-xs">
           {fallbackTitle || alt}
         </p>
       </div>
