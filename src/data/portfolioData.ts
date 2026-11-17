@@ -1,3 +1,9 @@
+import heroElectricalStudentImg from '../assets/images/hero_electrical_student_1794890035668.jpg';
+import projectPanelPhbImg from '../assets/images/project_panel_phb_1794890036081.jpg';
+import projectPlcMotorImg from '../assets/images/project_plc_motor_1794890036957.jpg';
+import projectSolarPltsImg from '../assets/images/project_solar_plts_1794890036712.jpg';
+import projectGroundingTestImg from '../assets/images/project_grounding_test_1794890037094.jpg';
+
 export type ProjectCategory =
   | 'Semua'
   | 'Panel & Distribusi'
@@ -59,7 +65,7 @@ export const STUDENT_PROFILE = {
   location: 'Bandung, Jawa Barat',
   email: 'nadia.kusuma.titl@example.id',
   phone: '+62 812-3456-7890',
-  heroImage: '/src/assets/images/hero_electrical_student_1794890035668.jpg',
+  heroImage: heroElectricalStudentImg,
   heroImageAlt:
     'Nadia Kusuma mengenakan kacamata pelindung dan seragam kerja teknik listrik sedang menguji panel distribusi 3-fasa menggunakan tang ampere digital di laboratorium',
   headline: 'Merancang Sistem Kelistrikan yang Aman, Presisi, dan Terukur.',
@@ -99,7 +105,7 @@ export const PROJECTS: PortfolioProject[] = [
     year: '2026',
     systemSpec: '380V / 50Hz · 3-Fasa + N + PE',
     featured: true,
-    image: '/src/assets/images/project_panel_phb_1794890036081.jpg',
+    image: projectPanelPhbImg,
     imageAlt:
       'Interior panel distribusi utama 3-fasa dengan susunan busbar tembaga presisi, pemutus tenaga MCCB, MCB cabang, dan meter daya digital',
     summary:
@@ -132,7 +138,7 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Otomasi PLC',
     year: '2025',
     systemSpec: 'PLC S7-1200 · 5,5 kW Motor',
-    image: '/src/assets/images/project_plc_motor_1794890036957.jpg',
+    image: projectPlcMotorImg,
     imageAlt:
       'Meja latih otomasi industri berisi PLC Siemens, kontaktor magnetik, relai beban lebih termal, dan motor induksi 3-fasa',
     summary:
@@ -164,7 +170,7 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Energi Terbarukan',
     year: '2025',
     systemSpec: '3,3 kWp · DC 48V / AC 230V',
-    image: '/src/assets/images/project_solar_plts_1794890036712.jpg',
+    image: projectSolarPltsImg,
     imageAlt:
       'Susunan panel surya monokristalin di atap gedung bersama inverter dan kotak penggabung DC terpasang rapi di dinding',
     summary:
@@ -196,7 +202,7 @@ export const PROJECTS: PortfolioProject[] = [
     category: 'Proteksi & Uji',
     year: '2026',
     systemSpec: 'Megger 500V · Metode 3-Titik',
-    image: '/src/assets/images/project_grounding_test_1794890037094.jpg',
+    image: projectGroundingTestImg,
     imageAlt:
       'Alat ukur digital tahanan pembumian Megger terhubung ke busbar grounding tembaga di ruang panel listrik',
     summary:
